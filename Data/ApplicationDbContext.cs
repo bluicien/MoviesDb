@@ -1,14 +1,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MoviesApi.Models;
 
 namespace MoviesApi.Data
 {
   public class ApplicationDbContext : IdentityDbContext<IdentityUser>
   {
-      public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-          : base(options) { }
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options) { }
 
-      // Your own tables
+    public DbSet<Movie> Movies { get; set; }
   }
 }
