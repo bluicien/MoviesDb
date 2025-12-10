@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MoviesApi.Data;
+using MoviesApi.Services;
+using MoviesApi.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +43,8 @@ builder.Services.AddAuthentication(options =>
 		)
 	};
 });
+
+builder.Services.AddScoped<IMovieService, MovieService>(); // Register movie service
 
 builder.Services.AddControllers();
 
