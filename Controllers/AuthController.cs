@@ -21,19 +21,19 @@ namespace MoviesApi.Controllers
     
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(string username, string password)
+    public async Task<IActionResult> Register(UserCredentials userCreds)
     {
-      var user = new IdentityUser { UserName = username };
-      var result = await _userManager.CreateAsync(user, password);
+      var user = new IdentityUser { UserName = userCreds.UserName };
+      var result = await _userManager.CreateAsync(user, userCreds.Password);
       if (result.Succeeded) return Ok("User registered");
       return BadRequest(result.Errors);
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(string username, string password)
+    public async Task<IActionResult> Login(UserCredentials userCreds)
     {
-      var user = await _userManager.FindByNameAsync(username);
-      if (user != null && await _userManager.CheckPasswordAsync(user, password))
+      var user = await _userManager.FindByNameAsync(userCreds.UserName);
+      if (user != null && await _userManager.CheckPasswordAsync(user, userCreds.Password))
       {
         var claims = new[] { new System.Security.Claims.Claim("sub", user.Id)};
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
@@ -52,5 +52,11 @@ namespace MoviesApi.Controllers
 
       return Unauthorized();
     }
+  }
+  
+  public class UserCredentials
+  {
+    public string UserName { get; set;} = string.Empty;
+    public string Password { get; set;} = string.Empty;
   }
 }
