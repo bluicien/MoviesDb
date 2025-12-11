@@ -4,6 +4,7 @@ using MoviesApi.Data;
 using MoviesApi.Exceptions.Movies;
 using MoviesApi.Models;
 using MoviesApi.Services.Interfaces;
+using MoviesApi.Extensions;
 
 namespace MoviesApi.Services
 {
@@ -135,6 +136,35 @@ namespace MoviesApi.Services
           _logger.LogError(ex, "Failed to retrieve movies in year range {startYear} to {endYear}", [startYear, endYear]);
         }
         throw new MovieException(MovieErrorType.NotFound, $"Failed to retrieve movies in year range {startYear} to {endYear}", ex);
+      }
+    }
+
+    public async Task<IEnumerable<Movie>> GetMoviesByQueries(
+      string? movieTitle, 
+      int? year, 
+      int? endYear, 
+      List<string>? category,
+      List<string>? genre
+    )
+    {
+      try
+      {
+        var results = await _context.Movies
+          .WhereIf(!string.IsNullOrWhiteSpace(movieTitle), m => m.Title.Contains(movieTitle!))
+          .WhereIf(year.HasValue && !endYear.HasValue, m => m.Year == year!.Value)
+          .WhereIf(endYear.HasValue && year.HasValue, m => m.Year <= endYear!.Value && m.Year >= year!.Value)
+          .WhereIf(category?.Count > 0, m => category!.Contains(m.Category))
+          .WhereIf(genre?.Count > 0, m => genre!.Contains(m.Genre))
+          .ToListAsync();
+        return results;
+      }
+      catch (SqlException ex)
+      {
+        if (_logger.IsEnabled(LogLevel.Error))
+        {
+          _logger.LogError(ex, "Failed to retrieve query results");
+        }
+        throw new MovieException(MovieErrorType.NotFound, "Failed to retrieve query results", ex);
       }
     }
 
