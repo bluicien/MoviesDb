@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MoviesApi.Exceptions.Movies;
 using MoviesApi.Services.Interfaces;
 
 namespace MoviesApi.Controllers
@@ -24,7 +25,7 @@ namespace MoviesApi.Controllers
         var movie = await _movieService.GetAllMovies();
         return Ok(movie);
       }
-      catch (Exception ex)
+      catch (MovieException ex) when (ex.ErrorType == MovieErrorType.NotFound)
       {
         _logger.LogError(ex, "Failed to retrieve all movies from MoveService");
         return Problem();
