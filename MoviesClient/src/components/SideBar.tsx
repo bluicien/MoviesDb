@@ -9,7 +9,7 @@ function SideBar() {
   const [openNavbar, setOpenNavbar] = useState<boolean>(true);
 
   return (
-    <nav className={clsx("flex justify-between relative", openNavbar ? "w-60" : "w-20")} >
+    <nav className={clsx("flex justify-between h-screen sticky top-0 left-0", openNavbar ? "w-60" : "w-20")} >
       <div className="flex flex-col justify-center grow bg-gray-500 border-r-2 rounded-r-md pt-5" >
 
         <h3 className="flex justify-center text-2xl font-bold mb-5 text-white px-5" >{openNavbar ? "MOVIES DB" : <DatabaseZap size={32} />}</h3>
