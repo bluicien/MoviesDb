@@ -1,4 +1,4 @@
-import { Menu, House, Info, Settings, DatabaseZap, Film } from 'lucide-react';
+import { Menu, House, Info, Settings, DatabaseZap, Film, LogIn, UserRoundPlus } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { clsx } from 'clsx';
@@ -18,15 +18,20 @@ function SideBar() {
             <House size={28} />
             {openNavbar && "Home"}
           </Link>
-          <Link to="about" className={clsx("flex gap-x-2 items-end w-full text-white text-lg font-semibold hover:bg-gray-400 px-5 py-2", !openNavbar && "justify-center")} >
-            <Info size={28} />
-            {openNavbar && "About"}
-          </Link>
           <Link to="movies" className={clsx("flex gap-x-2 items-end w-full text-white text-lg font-semibold hover:bg-gray-400 px-5 py-2", !openNavbar && "justify-center")} >
             <Film size={28} />
             {openNavbar && "Movies"}
           </Link>
-          <div className={clsx("flex gap-x-2 items-end w-full text-white text-lg font-semibold hover:bg-gray-400 px-5 py-2 mt-auto cursor-pointer", !openNavbar && "justify-center")} >
+          <Link to="about" className={clsx("flex gap-x-2 items-end w-full text-white text-lg font-semibold hover:bg-gray-400 px-5 py-2", !openNavbar && "justify-center")} >
+            <Info size={28} />
+            {openNavbar && "About"}
+          </Link>
+
+          <div className={clsx("flex w-full text-white text-lg font-semibold cursor-pointer mt-auto", !openNavbar && "justify-center flex-col")} >
+            <div className="flex items-center justify-center gap-x-1 text-center hover:bg-gray-400 px-2 py-2 grow-1" ><LogIn /> {openNavbar && "Login"}</div>
+            <div className="flex items-center justify-center gap-x-1 text-center hover:bg-gray-400 px-2 py-2 grow-1" ><UserRoundPlus /> {openNavbar && "Signup"}</div>
+          </div>
+          <div className={clsx("flex gap-x-2 items-end w-full text-white text-lg font-semibold hover:bg-gray-400 px-5 py-2 cursor-pointer", !openNavbar && "justify-center")} >
             <Settings />
             {openNavbar && "Settings"}
           </div>

@@ -1,7 +1,7 @@
 
 function Home() {
   return (
-    <div className="flex flex-col gap-y-5 h-full p-10 ml-10" >
+    <div className="flex flex-col gap-y-5 h-full" >
       <h2 className="text-2xl font-bold" >Welcome to the movies database.</h2>
       <div>
         <h3 className="text-xl font-medium mb-1" >Trending now</h3>

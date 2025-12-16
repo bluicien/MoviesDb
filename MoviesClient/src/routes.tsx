@@ -6,6 +6,7 @@ import About from './pages/about/About'
 import Auth from './pages/auth/Auth'
 import Login from './pages/auth/Login'
 import Signup from './pages/auth/Signup'
+import Movies from './pages/movies/Movies'
 
 export const router = createBrowserRouter([
   {
@@ -24,8 +25,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "movies",
-        children: [
-        ]
+        Component: Movies
       }
     ]
   },
