@@ -1,5 +1,5 @@
 {
-  "name": "package.json",
+  "name": "movie-client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,8 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.561.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "react-router": "^7.10.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
