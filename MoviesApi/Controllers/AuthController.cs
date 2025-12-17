@@ -29,9 +29,17 @@ namespace MoviesApi.Controllers
     {
       var user = new IdentityUser { UserName = userCreds.UserName };
       var result = await _userManager.CreateAsync(user, userCreds.Password);
-      if (result.Succeeded) return Ok("User registered");
+      if (!result.Succeeded)
+      {
+        return BadRequest(result.Errors);
+      }
 
-      return BadRequest(result.Errors);
+      ResponseTokenDTO tokens = await _authService.LoginUser(user);
+
+      string _refreshToken = "RefreshToken";
+      CookieHelper.SetCookie(Response, _refreshToken, tokens.RefreshToken.Token, tokens.RefreshToken.ExpiryDate, _env.IsDevelopment());
+      
+      return Ok(new { tokens.AccessToken });
     }
 
     [HttpPost("login")]
