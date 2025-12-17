@@ -47,7 +47,19 @@ namespace MoviesApi.Controllers
           signingCredentials: creds
         );
 
-        return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });;
+        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+        // Store JWT in secure token
+        Response.Cookies.Append("AuthToken", jwt, new CookieOptions
+        {
+          HttpOnly = true,
+          Secure = false,
+          SameSite = SameSiteMode.Strict,
+          Expires = DateTime.UtcNow.AddHours(1),
+          IsEssential = true
+        });
+
+        return Ok("Logged in successfully");
       }
 
       return Unauthorized();

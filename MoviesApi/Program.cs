@@ -12,12 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 var myAllowedOrigins = "_myAllowedOrigins";
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy(
-		name: myAllowedOrigins,
-		policy =>
-		{
-			policy.WithOrigins(builder.Configuration["Cors:AllowedOrigins"] ?? "");
-		}
+	options.AddPolicy(myAllowedOrigins,
+		policy => policy.WithOrigins(builder.Configuration["Cors:AllowedOrigins"] ?? "")
+			.AllowAnyHeader()
+			.AllowAnyMethod()
+			.AllowCredentials()
 	);
 });
 
@@ -26,7 +25,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
 	var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
 		?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-		Console.WriteLine(connectionString);
 	options.UseSqlServer(connectionString);
 });
 
@@ -34,7 +32,10 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 	.AddEntityFrameworkStores<ApplicationDbContext>()
 	.AddDefaultTokenProviders();
 
-// JWT Authentication
+
+// ==================================================== //
+// ================ JWT Authentication ================ //
+// ==================================================== //
 builder.Services.AddAuthentication(options =>
 {
 	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -54,12 +55,29 @@ builder.Services.AddAuthentication(options =>
 			Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
 		)
 	};
+	// Allow JWTs to read from Cookies.
+	options.Events = new JwtBearerEvents
+	{
+		OnMessageReceived = context =>
+		{
+			if (context.Request.Cookies.ContainsKey("AuthToken"))
+			{
+				context.Token = context.Request.Cookies["AuthToken"];
+			}
+
+			return Task.CompletedTask;
+		}
+	};
 });
 
 builder.Services.AddScoped<IMovieService, MovieService>(); // Register movie service
 
 builder.Services.AddControllers();
 
+
+// ==================================================== //
+// ====================  Build App ==================== //
+// ==================================================== //
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
