@@ -1,8 +1,7 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+using MoviesApi.DTO;
+using MoviesApi.Services.Interfaces;
 
 namespace MoviesApi.Controllers
 {
@@ -11,12 +10,14 @@ namespace MoviesApi.Controllers
   public class AuthController : Controller
   {
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly IConfiguration _config;
+    private readonly ILogger<AuthController> _logger;
+    private readonly IAuthService _authService;
 
-    public AuthController(IConfiguration config, UserManager<IdentityUser> userManager)
+    public AuthController(ILogger<AuthController> logger, IAuthService authService, UserManager<IdentityUser> userManager)
     {
+      _logger = logger;
+      _authService = authService;
       _userManager = userManager;
-      _config = config;
     }
     
 
@@ -33,36 +34,15 @@ namespace MoviesApi.Controllers
     public async Task<IActionResult> Login(UserCredentials userCreds)
     {
       var user = await _userManager.FindByNameAsync(userCreds.UserName);
-      if (user != null && await _userManager.CheckPasswordAsync(user, userCreds.Password))
-      {
-        var claims = new[] { new System.Security.Claims.Claim("sub", user.Id)};
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+      if (user == null || !await _userManager.CheckPasswordAsync(user, userCreds.Password))
+        return Unauthorized();
 
-        var token = new JwtSecurityToken(
-          issuer: _config["Jwt:Issuer"],
-          audience: _config["Jwt:Audience"],
-          claims: claims,
-          expires: DateTime.UtcNow.AddHours(1),
-          signingCredentials: creds
-        );
+      ResponseTokenDTO tokens = await _authService.LoginUser(user);
 
-        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+      string _refreshToken = "RefreshToken";
+      HttpContext.Items[_refreshToken] = tokens.RefreshToken;
 
-        // Store JWT in secure token
-        Response.Cookies.Append("AuthToken", jwt, new CookieOptions
-        {
-          HttpOnly = true,
-          Secure = false,
-          SameSite = SameSiteMode.Strict,
-          Expires = DateTime.UtcNow.AddHours(1),
-          IsEssential = true
-        });
-
-        return Ok("Logged in successfully");
-      }
-
-      return Unauthorized();
+      return Ok(new { tokens.AccessToken });
     }
   }
   

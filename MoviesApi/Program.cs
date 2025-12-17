@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MoviesApi.Data;
+using MoviesApi.Middleware;
 using MoviesApi.Services;
 using MoviesApi.Services.Interfaces;
 
@@ -55,22 +56,10 @@ builder.Services.AddAuthentication(options =>
 			Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
 		)
 	};
-	// Allow JWTs to read from Cookies.
-	options.Events = new JwtBearerEvents
-	{
-		OnMessageReceived = context =>
-		{
-			if (context.Request.Cookies.ContainsKey("AuthToken"))
-			{
-				context.Token = context.Request.Cookies["AuthToken"];
-			}
-
-			return Task.CompletedTask;
-		}
-	};
 });
 
 builder.Services.AddScoped<IMovieService, MovieService>(); // Register movie service
+builder.Services.AddScoped<IAuthService, AuthService>(); // Register auth service
 
 builder.Services.AddControllers();
 
@@ -91,6 +80,7 @@ app.UseRouting();
 app.UseCors(myAllowedOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<RefreshTokenCookieMiddleware>();
 app.MapControllers();
 
 app.Run();
