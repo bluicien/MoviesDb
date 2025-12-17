@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MoviesApi.Data;
-using MoviesApi.Middleware;
 using MoviesApi.Services;
 using MoviesApi.Services.Interfaces;
 
@@ -80,7 +79,6 @@ app.UseRouting();
 app.UseCors(myAllowedOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<RefreshTokenCookieMiddleware>();
 app.MapControllers();
 
 app.Run();
