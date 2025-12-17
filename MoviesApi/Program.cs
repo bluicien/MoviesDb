@@ -9,6 +9,18 @@ using MoviesApi.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var myAllowedOrigins = "_myAllowedOrigins";
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy(
+		name: myAllowedOrigins,
+		policy =>
+		{
+			policy.WithOrigins(builder.Configuration["Cors:AllowedOrigins"] ?? "");
+		}
+	);
+});
+
 // Setting up Database connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -57,9 +69,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseCors(myAllowedOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseRouting();
 app.MapControllers();
 
 app.Run();
