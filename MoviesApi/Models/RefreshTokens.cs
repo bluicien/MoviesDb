@@ -9,6 +9,7 @@ namespace MoviesApi.Models
     public string Token { get; set; } = string.Empty;
     public DateTime ExpiryDate { get; set; }
     public string UserId { get; set; } = string.Empty;
+    public DateTime? RevokedAt { get; set; }
     public IdentityUser? User { get; set; }
   }
 }

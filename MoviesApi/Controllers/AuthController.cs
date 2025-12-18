@@ -14,6 +14,7 @@ namespace MoviesApi.Controllers
     private readonly ILogger<AuthController> _logger;
     private readonly IAuthService _authService;
     private readonly IWebHostEnvironment _env;
+    private readonly string _refreshToken = "RefreshToken";
 
     public AuthController(ILogger<AuthController> logger, IAuthService authService, UserManager<IdentityUser> userManager, IWebHostEnvironment env)
     {
@@ -36,7 +37,6 @@ namespace MoviesApi.Controllers
 
       ResponseTokenDTO tokens = await _authService.LoginUser(user);
 
-      string _refreshToken = "RefreshToken";
       CookieHelper.SetCookie(Response, _refreshToken, tokens.RefreshToken.Token, tokens.RefreshToken.ExpiryDate, _env.IsDevelopment());
       
       return Ok(new { tokens.AccessToken });
@@ -51,9 +51,22 @@ namespace MoviesApi.Controllers
 
       ResponseTokenDTO tokens = await _authService.LoginUser(user);
 
-      string _refreshToken = "RefreshToken";
       CookieHelper.SetCookie(Response, _refreshToken, tokens.RefreshToken.Token, tokens.RefreshToken.ExpiryDate, _env.IsDevelopment());
       
+      return Ok(new { tokens.AccessToken });
+    }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh()
+    {
+      string? refreshToken = Request.Cookies[_refreshToken];
+      if (string.IsNullOrEmpty(refreshToken)) return BadRequest();
+
+      ResponseTokenDTO? tokens = await _authService.RefreshAccessToken(refreshToken);
+      if (tokens == null) return Unauthorized();
+
+      CookieHelper.SetCookie(Response, _refreshToken, tokens.RefreshToken.Token, tokens.RefreshToken.ExpiryDate, _env.IsDevelopment());
+
       return Ok(new { tokens.AccessToken });
     }
   }

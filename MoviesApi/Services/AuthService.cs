@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MoviesApi.Data;
 using MoviesApi.DTO;
@@ -40,6 +41,28 @@ namespace MoviesApi.Services
     public Task RegisterUser(IdentityUser user)
     {
       throw new NotImplementedException();
+    }
+
+    public async Task<ResponseTokenDTO?> RefreshAccessToken(string refreshToken)
+    {
+      RefreshToken? token = await _context.RefreshTokens
+        .Include(t => t.User)
+        .FirstOrDefaultAsync(t => t.Token == refreshToken && t.RevokedAt == null && t.ExpiryDate > DateTime.UtcNow);
+
+      if (token == null || token.User == null) return null;
+
+      RefreshToken newToken = await RotateRefreshToken(token);
+
+      return new ResponseTokenDTO { AccessToken = GenerateJwt(token.User), RefreshToken = newToken };
+    }
+
+    private async Task<RefreshToken> RotateRefreshToken(RefreshToken token)
+    {
+      token.RevokedAt = DateTime.UtcNow;
+      RefreshToken newToken = await CreateRefreshToken(token.UserId);
+      await _context.SaveChangesAsync();
+
+      return newToken;
     }
 
     private string GenerateJwt(IdentityUser user)
