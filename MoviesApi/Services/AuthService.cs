@@ -48,9 +48,22 @@ namespace MoviesApi.Services
       return;
     }
 
-    public Task RegisterUser(IdentityUser user)
+    public async Task<(ResponseTokenDTO? Tokens, IEnumerable<string>? Errors)> RegisterUser(UserCredentialsDTO userCreds)
     {
-      throw new NotImplementedException();
+      var user = new IdentityUser 
+      { 
+        UserName = userCreds.UserName.Trim(), 
+        Email = userCreds.Email?.Trim() 
+      };
+      IdentityResult result = await _userManager.CreateAsync(user, userCreds.Password);
+      if (!result.Succeeded)
+      {
+        return (null, result.Errors.Select(e => e.Description));
+      }
+
+      ResponseTokenDTO tokens = await LoginUser(user);
+      
+      return (tokens, null);
     }
 
     public async Task<ResponseTokenDTO?> RefreshAccessToken(string refreshToken)

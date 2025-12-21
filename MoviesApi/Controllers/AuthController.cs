@@ -29,18 +29,22 @@ namespace MoviesApi.Controllers
     [HttpPost("register")]
     public async Task<IActionResult> Register(UserCredentialsDTO userCreds)
     {
-      var user = new IdentityUser { UserName = userCreds.UserName };
-      var result = await _userManager.CreateAsync(user, userCreds.Password);
-      if (!result.Succeeded)
+      if (string.IsNullOrEmpty(userCreds.UserName) || string.IsNullOrEmpty(userCreds.Password))
       {
-        return BadRequest(result.Errors);
+        return BadRequest("Username and Password is required.");
       }
 
-      ResponseTokenDTO tokens = await _authService.LoginUser(user);
+      var (tokens, errors) = await _authService.RegisterUser(userCreds);
+      if (errors != null)
+      {
+        return BadRequest( new { errors });
+      }
+
+      if (tokens == null) return BadRequest("User registered, but automatic login failed.");
 
       CookieHelper.SetCookie(Response, _refreshToken, tokens.RefreshToken.Token, tokens.RefreshToken.ExpiryDate, _env.IsDevelopment());
       
-      return Ok(new { tokens.AccessToken });
+      return Created("/api/auth/me", new { tokens.AccessToken });
     }
 
     [HttpPost("login")]
