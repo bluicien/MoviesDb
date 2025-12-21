@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using MoviesApi.DTO;
 using MoviesApi.Services.Interfaces;
 using MoviesApi.Utilities;
@@ -54,6 +55,18 @@ namespace MoviesApi.Controllers
       CookieHelper.SetCookie(Response, _refreshToken, tokens.RefreshToken.Token, tokens.RefreshToken.ExpiryDate, _env.IsDevelopment());
       
       return Ok(new { tokens.AccessToken });
+    }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+      string? refreshToken = Request.Cookies[_refreshToken];
+      if (refreshToken == null) return Ok();
+
+      await _authService.LogoutUser(refreshToken);
+      Response.Cookies.Delete(_refreshToken);
+
+      return Ok();
     }
 
     [HttpPost("refresh")]

@@ -14,14 +14,16 @@ namespace MoviesApi.Services
   public class AuthService : IAuthService
   {
     private readonly ILogger<AuthService> _logger;
+    private readonly UserManager<IdentityUser> _userManager;
     private readonly ApplicationDbContext _context;
     private readonly IConfiguration _config;
 
-    public AuthService(ILogger<AuthService> logger, IConfiguration config, ApplicationDbContext context)
+    public AuthService(ILogger<AuthService> logger, IConfiguration config, ApplicationDbContext context, UserManager<IdentityUser> userManager)
     {
       _logger = logger;
       _config = config;
       _context = context;
+      _userManager = userManager;
     }
 
     public async Task<ResponseTokenDTO> LoginUser(IdentityUser user)
@@ -33,9 +35,17 @@ namespace MoviesApi.Services
       return new ResponseTokenDTO { AccessToken = accessToken, RefreshToken = refreshToken };
     }
 
-    public Task LogoutUser(IdentityUser user)
+    public async Task LogoutUser(string tokenId)
     {
-      throw new NotImplementedException();
+      RefreshToken? refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(t => t.Token == tokenId);
+      
+      if (refreshToken == null) return;
+      if (refreshToken.RevokedAt != null) return;
+
+      refreshToken.RevokedAt = DateTime.UtcNow;
+      await _context.SaveChangesAsync();
+
+      return;
     }
 
     public Task RegisterUser(IdentityUser user)
@@ -58,16 +68,23 @@ namespace MoviesApi.Services
 
     private async Task<RefreshToken> RotateRefreshToken(RefreshToken token)
     {
+      using var tx = await _context.Database.BeginTransactionAsync();
       token.RevokedAt = DateTime.UtcNow;
       RefreshToken newToken = await CreateRefreshToken(token.UserId);
       await _context.SaveChangesAsync();
+      tx.Commit();
 
       return newToken;
     }
 
     private string GenerateJwt(IdentityUser user)
     {
-      var claims = new[] { new Claim("sub", user.Id) };
+      var claims = new[] 
+      { 
+        new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+        new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
+        new Claim("username", user.UserName ?? "")
+      };
 
       var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
       var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

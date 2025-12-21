@@ -7,7 +7,7 @@ namespace MoviesApi.Services.Interfaces
   {
     Task<ResponseTokenDTO> LoginUser(IdentityUser user);
     Task<ResponseTokenDTO?> RefreshAccessToken(string refreshToken);
-    Task LogoutUser(IdentityUser user);
+    Task LogoutUser(string tokenId);
     Task RegisterUser(IdentityUser user);
   }
 }
