@@ -28,8 +28,8 @@ function SideBar() {
           </Link>
 
           <div className={clsx("flex w-full text-white text-lg font-semibold cursor-pointer mt-auto", !openNavbar && "justify-center flex-col")} >
-            <div className="flex items-center justify-center gap-x-1 text-center hover:bg-gray-400 px-2 py-2 grow-1" ><LogIn /> {openNavbar && "Login"}</div>
-            <div className="flex items-center justify-center gap-x-1 text-center hover:bg-gray-400 px-2 py-2 grow-1" ><UserRoundPlus /> {openNavbar && "Signup"}</div>
+            <Link to="/auth/login" className="flex items-center justify-center gap-x-1 text-center hover:bg-gray-400 px-2 py-2 grow-1" ><LogIn /> {openNavbar && "Login"}</Link>
+            <Link to="/auth/signup" className="flex items-center justify-center gap-x-1 text-center hover:bg-gray-400 px-2 py-2 grow-1" ><UserRoundPlus /> {openNavbar && "Signup"}</Link>
           </div>
           <div className={clsx("flex gap-x-2 items-end w-full text-white text-lg font-semibold hover:bg-gray-400 px-5 py-2 cursor-pointer", !openNavbar && "justify-center")} >
             <Settings />

@@ -1,8 +1,14 @@
-import React from 'react'
+
+import { Outlet } from "react-router";
 
 function Auth() {
+
+
+
   return (
-    <div>Auth</div>
+    <div className="flex justify-center items-center border-2 p-10" >
+      <Outlet />
+    </div>
   )
 }
 
