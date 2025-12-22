@@ -26,15 +26,20 @@ namespace MoviesApi.Services
       _userManager = userManager;
     }
 
-    public async Task<ResponseTokenDTO> LoginUser(IdentityUser user)
-    {
-      var accessToken = GenerateJwt(user);
 
-      RefreshToken refreshToken = await CreateRefreshToken(user.Id);
+    // LOGIN USER
+    public async Task<ResponseTokenDTO?> LoginUser(UserCredentialsDTO userCreds)
+    {
+      var user = await _userManager.FindByNameAsync(userCreds.UserName);
+      if (user == null || !await _userManager.CheckPasswordAsync(user, userCreds.Password))
+        return null;
+
+      ResponseTokenDTO tokens = await GenerateJwtAndLogin(user);
       
-      return new ResponseTokenDTO { AccessToken = accessToken, RefreshToken = refreshToken };
+      return tokens;
     }
 
+    // LOG OUT USER
     public async Task LogoutUser(string tokenId)
     {
       RefreshToken? refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(t => t.Token == tokenId);
@@ -48,6 +53,8 @@ namespace MoviesApi.Services
       return;
     }
 
+
+    // REGISTER AND LOGIN USER
     public async Task<(ResponseTokenDTO? Tokens, IEnumerable<string>? Errors)> RegisterUser(UserCredentialsDTO userCreds)
     {
       var user = new IdentityUser 
@@ -61,11 +68,24 @@ namespace MoviesApi.Services
         return (null, result.Errors.Select(e => e.Description));
       }
 
-      ResponseTokenDTO tokens = await LoginUser(user);
+      ResponseTokenDTO tokens = await GenerateJwtAndLogin(user);
       
       return (tokens, null);
     }
 
+
+    // CREATE JWT TOKEN AND LOGIN USER
+    private async Task<ResponseTokenDTO> GenerateJwtAndLogin(IdentityUser user)
+    {
+      var accessToken = GenerateJwt(user);
+
+      RefreshToken refreshToken = await CreateRefreshToken(user.Id);
+      
+      return new ResponseTokenDTO { AccessToken = accessToken, RefreshToken = refreshToken };
+    }
+
+
+    // REFRESH ACCESS TOKEN WITH REFRESH TOKEN
     public async Task<ResponseTokenDTO?> RefreshAccessToken(string refreshToken)
     {
       RefreshToken? token = await _context.RefreshTokens
@@ -79,6 +99,8 @@ namespace MoviesApi.Services
       return new ResponseTokenDTO { AccessToken = GenerateJwt(token.User), RefreshToken = newToken };
     }
 
+
+    // ROTATE REFRESH TOKEN
     private async Task<RefreshToken> RotateRefreshToken(RefreshToken token)
     {
       using var tx = await _context.Database.BeginTransactionAsync();
@@ -90,6 +112,8 @@ namespace MoviesApi.Services
       return newToken;
     }
 
+
+    // CREATE JWT TOKEN
     private string GenerateJwt(IdentityUser user)
     {
       var claims = new[] 
@@ -113,6 +137,8 @@ namespace MoviesApi.Services
       return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
+
+    // CREATE REFRESH TOKEN
     private async Task<RefreshToken> CreateRefreshToken(string userId)
     {
       var refreshToken = Guid.NewGuid().ToString();
