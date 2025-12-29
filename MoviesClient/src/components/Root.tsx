@@ -19,8 +19,6 @@ function Root() {
           credentials: "include"
         })
 
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
         if (!result.ok)
         {
           throw new Error("Authentication Failed.")

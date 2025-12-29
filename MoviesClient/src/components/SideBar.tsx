@@ -1,6 +1,6 @@
 import { Menu, House, Info, Settings, DatabaseZap, Film, LogIn, LogOut, UserRoundPlus } from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { clsx } from 'clsx';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import { clearToken, selectAccessToken } from '../redux/features/token/tokenSlice';
@@ -11,20 +11,26 @@ function SideBar() {
   const [openNavbar, setOpenNavbar] = useState<boolean>(true);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const token = !!useAppSelector(selectAccessToken);
 
   const handleLogout = async () => {
     try {
-      const url = `${import.meta.env.VITE_MOVIES_API}/api/auth/login`;
+      const url = `${import.meta.env.VITE_MOVIES_API}/api/auth/logout`;
       const data = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include"
       });
 
+      navigate("/auth/login")
+
       if (!data.ok) {
         throw new Error("Internal Server Error. Failed to logout");
       }
+
+
       
     } catch (error) {
       if (error instanceof Error)
