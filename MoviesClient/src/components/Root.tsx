@@ -9,7 +9,7 @@ function Root() {
         <header className="flex items-center h-30 w-full p-4 pl-50" >
           <h1 className="text-6xl text-white font-bold text-shadow-md text-shadow-black/50" >The Movies Database</h1>
         </header>
-        <div className="flex flex-col justify-center flex-1 self-center p-10 ml-10" >
+        <div className="flex flex-col justify-center flex-1 p-10 ml-10" >
           <Outlet />
         </div>
       </div>

@@ -7,6 +7,8 @@ import Auth from './pages/auth/Auth'
 import Login from './pages/auth/Login'
 import Signup from './pages/auth/Signup'
 import Movies from './pages/movies/Movies'
+import ProtectedRoute from './components/ProtectedRoute'
+import PublicRoute from './components/PublicRoute'
 
 export const router = createBrowserRouter([
   {
@@ -17,17 +19,24 @@ export const router = createBrowserRouter([
       { path: "about", Component: About },
       {
         path: "auth",
-        Component: Auth,
+        Component: PublicRoute,
         children: [
-          { index: true, element: <Navigate to="login" replace /> },
-          { path: "login", Component: Login },
-          { path: "signup", Component: Signup }
+          {
+            Component: Auth,
+            children: [
+              { index: true, element: <Navigate to="login" replace /> },
+              { path: "login", Component: Login },
+              { path: "signup", Component: Signup }
+            ]
+          }
         ]
       },
       {
-        path: "movies",
-        Component: Movies
+        Component: ProtectedRoute,
+        children: [
+          { path: "movies", Component: Movies }
+        ]
       }
     ]
   },
-])
+]);

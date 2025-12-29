@@ -1,8 +1,11 @@
 import { Link } from 'react-router'
 
 function Signup() {
+
+  
+
   return (
-    <div>
+    <div className="border-2 p-10">
       <h3 className="font-bold text-3xl mb-4" >SIGN UP</h3>
       <fieldset className="flex flex-col gap-4" >
         <div className="flex flex-col gap-1 w-300 md:w-100" >
@@ -46,7 +49,13 @@ function Signup() {
             />
         </div>
         <div className="flex flex-col gap-1 w-300 md:w-100 mt-5" >
-          <button type="submit" className="bg-blue-500 py-2 rounded-md hover:bg-blue-700 active:bg-blue-800 text-shadow-sm text-shadow-black/30 shadow-md shadow-gray-300/20 ring-1" >Register User</button>
+          <button 
+            type="submit"
+            aria-label="Account Register Button"
+            className="bg-blue-500 py-2 rounded-md hover:bg-blue-700 active:bg-blue-800 text-shadow-sm text-shadow-black/30 shadow-md shadow-gray-300/20 ring-1" 
+          >
+            Register User
+          </button>
         </div>
       </fieldset>
       <div className="mt-4" >
