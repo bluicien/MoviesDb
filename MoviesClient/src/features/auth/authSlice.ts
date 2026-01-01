@@ -1,18 +1,18 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../../store";
+import type { RootState } from "../../app/store";
 
-type TokenState = {
+type AuthState = {
   accessToken: string | null,
   isInitialLoad: boolean
 }
 
-const initialState: TokenState = {
+const initialState: AuthState = {
   accessToken: null,
   isInitialLoad: true
 }
 
-export const tokenSlice = createSlice({
-  name: "token",
+export const authSlice = createSlice({
+  name: "auth",
   initialState,
   reducers: {
     setNewAccessToken: (state, action: PayloadAction<string>) => {
@@ -28,10 +28,10 @@ export const tokenSlice = createSlice({
 });
 
 
-export const { setNewAccessToken, clearToken, setFinishLoading } = tokenSlice.actions;
+export const { setNewAccessToken, clearToken, setFinishLoading } = authSlice.actions;
 
 // Selectors
-export const selectAccessToken = (state: RootState) => state.token.accessToken;
-export const getLoadState = (state: RootState) => state.token.isInitialLoad;
+export const selectAccessToken = (state: RootState) => state.auth.accessToken;
+export const getLoadState = (state: RootState) => state.auth.isInitialLoad;
 
-export default tokenSlice.reducer;
+export default authSlice.reducer;

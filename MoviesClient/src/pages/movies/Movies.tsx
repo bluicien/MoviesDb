@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react"
+import { useMovies } from "../../hooks/movies/useMovies";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 type Movie = {
   id: string,
@@ -12,25 +13,12 @@ type Movie = {
 
 function Movies() {
 
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const { data, isLoading, error } = useMovies();
 
-  
+  if (isLoading) return <LoadingSpinner />;
+  if (error) return <p>Something went wrong</p>;
 
-  useEffect(() => 
-  {
-    async function getMovies() {
-      try {
-        const data = await fetch(`${import.meta.env.VITE_MOVIES_API}/api/movies`);
-        const movies = await data.json();
-        console.log(movies);
-        setMovies(movies);
-      } catch (error) {
-        console.error(error);
-      }
-    }
 
-  getMovies();
-  }, [])
   return (
     <div className="flex flex-col gap-y-5 h-full" >
       <h2 className="text-2xl font-bold">Movies</h2>
@@ -50,7 +38,7 @@ function Movies() {
               </tr>
             </thead>
             <tbody>
-            {movies && movies.map((movie, i) =>
+            {data && data.map((movie: Movie, i: number) =>
               <tr key={movie.id} >
                 <td className="border-y-1 border-gray-400 px-2 py-1 whitespace-nowrap" >{i + 1}</td>
                 <td className="border-y-1 border-gray-400 px-2 py-1 truncate" >{movie.title}</td>

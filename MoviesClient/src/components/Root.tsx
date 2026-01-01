@@ -1,8 +1,8 @@
 import { Outlet } from "react-router";
 import SideBar from "./SideBar";
 import { useEffect } from "react";
-import { useAppDispatch } from "../hooks/reduxHooks";
-import { clearToken, setFinishLoading, setNewAccessToken } from "../redux/features/token/tokenSlice";
+import { useAppDispatch } from "../app/hooks";
+import { clearToken, setFinishLoading, setNewAccessToken } from "../features/auth/authSlice";
 
 function Root() {
 

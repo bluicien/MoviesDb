@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router";
-import { useAppSelector } from "../hooks/reduxHooks";
-import { getLoadState, selectAccessToken } from "../redux/features/token/tokenSlice";
+import { useAppSelector } from "../app/hooks";
+import { getLoadState, selectAccessToken } from "../features/auth/authSlice";
 import LoadingSpinner from "./LoadingSpinner";
 
 function ProtectedRoute() {

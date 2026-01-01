@@ -2,8 +2,8 @@ import { Menu, House, Info, Settings, DatabaseZap, Film, LogIn, LogOut, UserRoun
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { clsx } from 'clsx';
-import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
-import { clearToken, selectAccessToken } from '../redux/features/token/tokenSlice';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { clearToken, selectAccessToken } from '../features/auth/authSlice';
 
 
 function SideBar() {
