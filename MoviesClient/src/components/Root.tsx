@@ -46,11 +46,11 @@ function Root() {
   return (
     <div className="min-h-screen flex flex-1 relative bg-gray-700" >
       <SideBar />
-      <div className="flex flex-col w-full h-full text-white">
-        <header className="flex items-center w-full md:pl-40" >
-          <h1 className="text-4xl md:text-6xl text-white font-bold text-shadow-md text-shadow-black/50" >The Movies Database</h1>
+      <div className="flex flex-col w-full min-h-screen h-full text-white">
+        <header className="flex items-center h-30 md:h-40 w-full pl-10 sm:pl-0 md:pl-30 border-b-1" >
+          <h1 className="text-4xl md:text-6xl text-white font-bold text-shadow-md text-shadow-black/50" >The Movies<br />Database</h1>
         </header>
-        <div className="flex flex-col h-full justify-center flex-1 p-10 ml-10" >
+        <div className="flex flex-col h-full flex-1 p-2 md:p-10" >
           <Outlet />
         </div>
       </div>

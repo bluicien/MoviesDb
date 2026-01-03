@@ -4,7 +4,7 @@ import { Outlet } from "react-router";
 function Auth() {
 
   return (
-    <div className="flex justify-center h-full items-start mt-10" >
+    <div className="flex justify-center items-start my-auto h-full " >
       <Outlet />
     </div>
   )

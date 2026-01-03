@@ -14,10 +14,10 @@ function Login() {
   }
 
   return (
-    <div className="border-2 p-10" >
+    <div className="border-2 p-5 md:p-10 w-full md:w-auto" >
       <h3 className="font-bold text-3xl mb-4" >LOGIN</h3>
       <form className="flex flex-col gap-4" action={handleSubmit} >
-        <div className="flex flex-col gap-1 w-50 md:w-100" >
+        <div className="flex flex-col gap-1 md:w-100" >
           <label className="font-semibold  " htmlFor="username">Username :</label>
           <input 
             type="text" 
@@ -27,7 +27,7 @@ function Login() {
             className="text-black bg-white rounded-sm px-2 py-1"
             />
         </div>
-        <div className="flex flex-col gap-1 w-50 md:w-100" >
+        <div className="flex flex-col gap-1 md:w-100" >
           <label className="font-semibold" htmlFor="username">Password :</label>
           <input 
             type="password" 
@@ -37,7 +37,7 @@ function Login() {
             className="text-black bg-white rounded-sm px-2 py-1"
             />
         </div>
-        <div className="flex flex-col gap-1 w-50 md:w-100 mt-5" >
+        <div className="flex flex-col gap-1 md:w-100 mt-5" >
           <button 
             type="submit"
             aria-label="Login Button"

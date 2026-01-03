@@ -1,17 +1,19 @@
 import { Menu, House, Info, Settings, DatabaseZap, Film, LogIn, LogOut, UserRoundPlus } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { clsx } from 'clsx';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { clearToken, selectAccessToken } from '../features/auth/authSlice';
+import { useMediaQuery } from '../hooks/useMediaQueries';
 
 
 function SideBar() {
 
   const [openNavbar, setOpenNavbar] = useState<boolean>(true);
-
+  
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width: 620px)");
 
   const token = !!useAppSelector(selectAccessToken);
 
@@ -40,8 +42,13 @@ function SideBar() {
     }
   }
 
+  useEffect(() => {
+    setOpenNavbar(!isMobile);
+  }, [isMobile])
+
+
   return (
-    <nav className={clsx("flex justify-between h-screen sticky top-0 left-0", openNavbar ? "w-60" : "w-20")} >
+    <nav className={clsx("flex justify-between h-screen sticky top-0 left-0", openNavbar ? "w-60 mr-10" : "w-20")} >
       <div className="flex flex-col justify-center grow bg-gray-500 border-r-2 rounded-r-md pt-5" >
 
         <h3 className="flex justify-center text-2xl font-bold mb-5 text-white px-5" >{openNavbar ? "MOVIES DB" : <DatabaseZap size={32} />}</h3>
@@ -78,7 +85,7 @@ function SideBar() {
               {openNavbar && "Signup"}
             </Link>
           </div>
-          : <div 
+          : <div
               onClick={handleLogout}
               aria-label="Logout button"
               className={clsx("flex gap-x-2 items-end w-full text-white text-lg bg-red-500 font-semibold hover:bg-red-700 px-5 py-2 mt-auto cursor-pointer ", !openNavbar && "justify-center")} >
@@ -97,12 +104,13 @@ function SideBar() {
           </div>
         </div>
       </div>
+      {!isMobile &&
       <div 
         className="flex items-center justify-center self-center w-10 h-20 absolute left-full bg-gray-600 border-r-2 border-y-2 rounded-r-2xl hover:bg-gray-700 hover:cursor-pointer"
         onClick={() => setOpenNavbar(!openNavbar)}  
       >
         <Menu />
-      </div>
+      </div>}
     </nav>
   )
 }

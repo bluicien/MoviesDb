@@ -2,13 +2,11 @@ import { Link } from 'react-router'
 
 function Signup() {
 
-  
-
   return (
-    <div className="border-2 p-10">
+    <div className="border-2 p-5 md:p-10 w-full md:w-auto">
       <h3 className="font-bold text-3xl mb-4" >SIGN UP</h3>
       <fieldset className="flex flex-col gap-4" >
-        <div className="flex flex-col gap-1 w-300 md:w-100" >
+        <div className="flex flex-col gap-1 md:w-100" >
           <label className="font-semibold  " htmlFor="username">Username :</label>
           <input 
             type="text" 
@@ -18,7 +16,7 @@ function Signup() {
             className="text-black bg-white rounded-sm px-2 py-1"
             />
         </div>
-        <div className="flex flex-col gap-1 w-300 md:w-100" >
+        <div className="flex flex-col gap-1 md:w-100" >
           <label className="font-semibold  " htmlFor="email">Email :</label>
           <input 
             type="email" 
@@ -28,7 +26,7 @@ function Signup() {
             className="text-black bg-white rounded-sm px-2 py-1"
             />
         </div>
-        <div className="flex flex-col gap-1 w-300 md:w-100" >
+        <div className="flex flex-col gap-1 md:w-100" >
           <label className="font-semibold" htmlFor="password">Password :</label>
           <input 
             type="password" 
@@ -38,7 +36,7 @@ function Signup() {
             className="text-black bg-white rounded-sm px-2 py-1"
             />
         </div>
-        <div className="flex flex-col gap-1 w-300 md:w-100" >
+        <div className="flex flex-col gap-1 md:w-100" >
           <label className="font-semibold" htmlFor="confirmPassword">Confirm Password :</label>
           <input 
             type="password" 
@@ -48,7 +46,7 @@ function Signup() {
             className="text-black bg-white rounded-sm px-2 py-1"
             />
         </div>
-        <div className="flex flex-col gap-1 w-300 md:w-100 mt-5" >
+        <div className="flex flex-col gap-1 md:w-100 mt-5" >
           <button 
             type="submit"
             aria-label="Account Register Button"
