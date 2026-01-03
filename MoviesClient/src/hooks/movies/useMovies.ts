@@ -3,6 +3,7 @@ import { api } from "../../libs/api";
 
 async function fetchMovies() {
   const res = await api.get("/api/movies");
+  console.log(res.data)
   return res.data;
 }
 
