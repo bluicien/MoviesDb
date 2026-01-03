@@ -1,16 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
 import { useAppDispatch } from "../../app/hooks";
-import { loginApi } from "./api";
-import { setNewAccessToken } from "./authSlice";
-import type { LoginRequest, LoginResponse } from "./schemas";
+import type { SignupRequest, SignupResponse } from "./schemas";
 import type { AppError } from "../../libs/errors";
+import { signupApi } from "./api";
+import { setNewAccessToken } from "./authSlice";
 
-export function useLogin() {
+export function useSignup() {
   const dispatch = useAppDispatch();
 
-  return useMutation<LoginResponse, AppError, LoginRequest>({
-    mutationKey: ["login"],
-    mutationFn: loginApi,
+  return useMutation<SignupResponse, AppError, SignupRequest>({
+    mutationKey: ["signup"],
+    mutationFn: signupApi,
     retry: false,
     onSuccess: (data) => {
       dispatch(setNewAccessToken(data.accessToken));

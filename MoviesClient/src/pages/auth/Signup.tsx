@@ -24,7 +24,7 @@ function Signup() {
             type="email" 
             id="email" 
             name="email"
-            placeholder="John Doe"
+            placeholder="john.doe@example.com"
             className="text-black bg-white rounded-sm px-2 py-1"
             />
         </div>

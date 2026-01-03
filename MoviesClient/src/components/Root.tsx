@@ -47,7 +47,7 @@ function Root() {
     <div className="min-h-screen flex flex-1 relative bg-gray-700" >
       <SideBar />
       <div className="flex flex-col w-full h-full text-white">
-        <header className="flex items-center w-full p-4 md:pl-40" >
+        <header className="flex items-center w-full md:pl-40" >
           <h1 className="text-4xl md:text-6xl text-white font-bold text-shadow-md text-shadow-black/50" >The Movies Database</h1>
         </header>
         <div className="flex flex-col h-full justify-center flex-1 p-10 ml-10" >
