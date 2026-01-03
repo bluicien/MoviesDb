@@ -3,12 +3,18 @@ import type { RootState } from "../../app/store";
 
 type AuthState = {
   accessToken: string | null,
-  isInitialLoad: boolean
+  isInitialLoad: boolean,
+  user: {
+    username: string,
+  }
 }
 
 const initialState: AuthState = {
   accessToken: null,
-  isInitialLoad: true
+  isInitialLoad: true,
+  user: {
+    username: "",
+  }
 }
 
 export const authSlice = createSlice({
