@@ -1,19 +1,10 @@
-import { useMovies } from "../../hooks/movies/useMovies";
+import { Link } from "react-router";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { useGetMoviesList } from "../../features/movies/useGetMoviesList";
 
-type Movie = {
-  id: string,
-  title: string,
-  year: number,
-  genre: string,
-  category: string,
-  description: string,
-  distribution: string
-}
+function MoviesList() {
 
-function Movies() {
-
-  const { data, isLoading, error } = useMovies();
+  const { data, isLoading, error } = useGetMoviesList();
 
   if (isLoading) return <LoadingSpinner />;
   if (error) return <p>Something went wrong</p>;
@@ -38,10 +29,10 @@ function Movies() {
               </tr>
             </thead>
             <tbody>
-            {data && data.map((movie: Movie, i: number) =>
+            {data && data.map((movie, i) =>
               <tr key={movie.id} >
                 <td className="border-y-1 border-gray-400 px-2 py-1 whitespace-nowrap" >{i + 1}</td>
-                <td className="border-y-1 border-gray-400 px-2 py-1 truncate" >{movie.title}</td>
+                <td className="border-y-1 border-gray-400 px-2 py-1 truncate" ><Link to={movie.id}>{movie.title}</Link></td>
                 <td className="border-y-1 border-gray-400 px-2 py-1 whitespace-nowrap" >{movie.year}</td>
                 <td className="border-y-1 border-gray-400 px-2 py-1 whitespace-nowrap" >{movie.genre}</td>
                 <td className="border-y-1 border-gray-400 px-2 py-1 whitespace-nowrap" >{movie.category}</td>
@@ -57,4 +48,4 @@ function Movies() {
   )
 }
 
-export default Movies
+export default MoviesList

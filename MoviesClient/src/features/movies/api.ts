@@ -1,16 +1,21 @@
-import z from "zod";
+import { api } from "../../libs/api"
+import { handleErrors } from "../../libs/helpers";
+import { MovieSchema, MoviesListSchema, type Movie, type MoviesList } from "./schemas";
 
-export const MovieSchema = z.object({
-  id: z.string().min(1),
-  title: z.string().min(1),
-  year: z.number().int().min(1800).max(9999).nullable(),
-  genre: z.string().nullable(),        // or z.array(z.string()).nullable()
-  category: z.string().nullable(),
-  description: z.string().nullable(),
-  distribution: z.string().nullable()
-});
+export async function fetchMoviesList(): Promise<MoviesList> {
+  try {
+    const res = await api.get("/api/movies");
+    return MoviesListSchema.parse(res.data);
+  } catch (err) {
+    handleErrors(err, "Failed to fetch movies.");
+  }
+}
 
-export const MoviesListSchema = z.array(MovieSchema);
-
-export type Movie = z.infer<typeof MovieSchema>;
-export type MoviesList = z.infer<typeof MoviesListSchema>;
+export async function  fetchMovie(movieId: string): Promise<Movie> {
+  try {
+    const res = await api.get(`/api/movies/${movieId}`);
+    return MovieSchema.parse(res.data);
+  } catch (err) {
+    handleErrors(err, "Failed to fetch movies.");
+  }
+}

@@ -6,9 +6,10 @@ import About from './pages/about/About'
 import Auth from './pages/auth/Auth'
 import Login from './pages/auth/Login'
 import Signup from './pages/auth/Signup'
-import Movies from './pages/movies/Movies'
+import MoviesList from './pages/movies/MoviesList'
 import ProtectedRoute from './components/ProtectedRoute'
 import PublicRoute from './components/PublicRoute'
+import Movie from './pages/movies/movie/Movie'
 
 export const router = createBrowserRouter([
   {
@@ -33,8 +34,10 @@ export const router = createBrowserRouter([
       },
       {
         Component: ProtectedRoute,
+        path: "movies",
         children: [
-          { path: "movies", Component: Movies }
+          { index: true, Component: MoviesList },
+          { path: ":id", Component: Movie }
         ]
       }
     ]
