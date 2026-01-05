@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { MemoryRouter } from "react-router-dom";
-import LoginForm from "../features/auth/components/LoginForm";
+import SignupForm from "../features/auth/components/SignupForm";
+import { MemoryRouter } from "react-router";
 
-const meta: Meta<typeof LoginForm> = {
-  title: "Auth/LoginForm",
-  component: LoginForm,
+
+const meta: Meta<typeof SignupForm> = {
+  title: "Auth/SignupForm",
+  component: SignupForm,
   decorators: [
     (RenderStory) => (
       <MemoryRouter>
@@ -15,7 +16,7 @@ const meta: Meta<typeof LoginForm> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof LoginForm>;
+type Story = StoryObj<typeof SignupForm>;
 
 export const FormPending: Story = {
   args: {

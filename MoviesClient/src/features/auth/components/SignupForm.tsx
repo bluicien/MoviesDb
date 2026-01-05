@@ -85,7 +85,7 @@ function SignupForm({ onSubmit, isLoading, serverError }: SignupFormProps) {
       <div className="mt-4" >
         <p className="text-sm" >
           Already have an account? 
-          <Link to="/auth/login" className="text-blue-400 ml-1" >Login here</Link>
+          <Link to="/auth/login" className="text-blue-400 ml-1 hover:underline" >Login here</Link>
         </p>
       </div>
     </div>
