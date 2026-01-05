@@ -2,6 +2,7 @@ import { LoginRequestSchema, type LoginRequest } from '../schemas'
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from 'react-router';
+import NativeInput from '../../../components/NativeInput';
 
 export type LoginFormProps = {
   onSubmit: (data: LoginRequest) => void,
@@ -28,27 +29,10 @@ function LoginForm({ onSubmit, isLoading, serverError }: LoginFormProps) {
       <h3 className="font-bold text-3xl mb-4" >LOGIN</h3>
       {serverError && <p className="mt-2 py-1 px-2 text-red-500 text-md font-medium bg-red-200 border-2 border-red-500 rounded-md" >{serverError}</p>}
       <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)} >
-        <div className="flex flex-col gap-1 md:w-100" >
-          <label className="font-semibold  " htmlFor="username">Username :</label>
-          <input 
-            type="text" 
-            id="username"
-            {...register("username")}
-            placeholder="John Doe"
-            className="text-black bg-white rounded-sm px-2 py-1"
-          />
-        </div>
-        <div className="flex flex-col gap-1 md:w-100" >
-          <label className="font-semibold" htmlFor="username">Password :</label>
-          <input 
-            type="password" 
-            id="password" 
-            {...register("password")}
-            placeholder="**********"
-            className="text-black bg-white rounded-sm px-2 py-1"
-            />  
-        </div>
-        <div className="flex flex-col gap-1 md:w-100 mt-5" >
+        <NativeInput label="username" placeholder="johndoe2" type="text" {...register("username")} />
+        <NativeInput label="password" placeholder="**********" type="password" {...register("password")} />
+
+        <div className="flex flex-col gap-1 md:w-100 mt-5" > 
           <button 
             type="submit"
             aria-label="Login Button"
