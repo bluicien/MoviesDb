@@ -26,6 +26,7 @@ function LoginForm({ onSubmit, isLoading, serverError }: LoginFormProps) {
   return (
     <div className="border-2 p-5 md:p-10 w-full md:w-auto bg-gray-700 text-white max-w-120" >
       <h3 className="font-bold text-3xl mb-4" >LOGIN</h3>
+      {serverError && <p className="mt-2 py-1 px-2 text-red-500 text-md font-medium bg-red-200 border-2 border-red-500 rounded-md" >{serverError}</p>}
       <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)} >
         <div className="flex flex-col gap-1 md:w-100" >
           <label className="font-semibold  " htmlFor="username">Username :</label>
@@ -58,8 +59,6 @@ function LoginForm({ onSubmit, isLoading, serverError }: LoginFormProps) {
           </button>
         </div>
       </form>
-
-      {serverError && <p className="text-center text-red-500 mt-1" >{serverError}</p>}
 
       <div className="mt-4 underline-offset-4" >
         <Link to="/auth/signup" className="text-sm text-blue-400 hover:underline"  >Forgot your password?</Link>
