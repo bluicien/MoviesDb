@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 export const LoginRequestSchema = z.object({
-  username: z.string().min(3),
-  password: z.string().min(3),
+  username: z.string({ error: issue => issue.input === undefined ? "Username Required" : "Invalid Username" }).min(3, { error: "Username must be minium 3 characters."}),
+  password: z.string({ error: issue => issue.input === undefined ? "Password Required" : "Invalid Password" }).min(3, { error: "Password must be minium 3 characters."}),
 });
 
 export const LoginResponseSchema = z.object({
-  accessToken: z.string().min(1),
+  accessToken: z.string().min(1, { error: "No access token."}),
 });
 
 export type LoginRequest = z.infer<typeof LoginRequestSchema>;
